@@ -1,0 +1,117 @@
+<html>
+<head>
+    <title>Visualisation 3</title>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/vega/3.0.10/vega.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-lite/2.1.2/vega-lite.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-embed/3.0.0-rc7/vega-embed.js"></script>
+   <style>
+       body {
+             font-family: sans-serif;
+           }
+    
+           .vega-actions a {
+             padding: 0.2em;
+           }
+    </style>
+</head>
+<body>
+    <table style="width: 850px; margin-left: auto; margin-right: auto;" cellspacing="5" cellpadding="5">
+    <tbody>
+    <tr>
+    <td style="width: 200px; vertical-align: top;"><strong>Name:&nbsp;</strong></td>
+    <td style="vertical-align: top;">Laura Brierton</td>
+    </tr>
+    <tr>
+    <td style="vertical-align: top;"><strong>Student Number:</strong></td>
+    <td style="vertical-align: top;">15317451</td>
+    </tr>
+    <tr>
+    <td style="vertical-align: top;"><strong>Dataset description:</strong></td>
+    <td style="vertical-align: top;">
+    <p><a href="https://data.gov.ie/dataset/2016-make-model-year-failures-at-nct" target="_blank" rel="noopener">2016 Make Model Year Failures at NCT</a>.</p>
+    <p>This data set contains information relating to vehicle makes and models tested by the National Car Testing Service in 2016. It also contains data as to why the vehicles failed</p>
+    </td>
+    </tr>
+    <tr>
+    <td style="vertical-align: top;"><strong>Initial questions</strong></td>
+    <td style="vertical-align: top;">How do the pass rates differ across car makes? Is there a relationship between car condition and likelyhood of passing the NCT?</td>
+    </tr>
+    </tbody>
+    </table>
+    <hr />
+  <div id="vis" align="center"></div>
+  <script type="text/javascript">
+    var yourVlSpec =  {
+      "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
+      "data": {
+        "url": "https://raw.githubusercontent.com/L-brierton/Information-Visualisation-of-Car-Dataset/master/Make%20Model%20Data%202016.csv",
+        "format": {
+          "type": "csv"
+        }
+      },
+      "transform": [
+        {
+             "filter":{ 
+                "field": "VehicleMake", 
+                "oneOf":["HYUNDAI", "VOLKSWAGEN","TOYOTA","FORD","NISSAN","SKODA","RENAULT","OPEL","KIA","AUDI"]
+              } 
+            }
+      ],
+      "title": {
+        "text": "Top 10 Most Popular Car Makes compared by Fail Items",
+        "anchor": "middle"
+      },
+      "repeat": {"column": ["Vehicle and Safety Equipment %","Lighting and Electrical %", "Steering and Suspension %", "Wheels and Tyres %"]},
+ "spec":{
+    "mark": "bar",
+    "encoding": {
+        "x": {
+        "field": "VehicleMake",
+        "type": "nominal",
+        "axis": {"title": null},
+
+        "sort": {
+            "op": "mean",
+            "field": {"repeat": "column"},
+            "order": "descending"
+        }
+        },
+        "y": {
+        "field": {"repeat": "column"},
+        "type": "quantitative",
+        "aggregate": "mean"
+        },
+        "color": {
+  	      "condition": {
+  	        "test": "datum.VehicleMake == 'SKODA'",
+  			  "value": "#FF7F50"
+  	      },
+  	      "value": "#00C5CD"
+        }
+    }
+  }
+}
+vegaEmbed("#vis", yourVlSpec);
+  </script>
+    <hr />
+<table style="width: 850px; margin-left: auto; margin-right: auto;" cellspacing="5" cellpadding="5">
+<tbody>
+<tr>
+<td style="width: 200px; vertical-align: top;"><strong>Description:&nbsp;</strong></td>
+<td style="vertical-align: top;">These four bar charts show the average Vehicle and Safety Equipment % fails, Lighting and Electrical % fails, Steering and Suspension % fails and Wheels and Tyres % fails of the 10 most popular makes of cars in Ireland for 2016 (from this <a href="https://www.independent.ie/life/motoring/car-news/revealed-irelands-top-10-best-selling-cars-in-2016-35179498.html" target="_blank" rel="noopener">source</a>). Each bar chart is sorted from maximum to minimum for each attribute. <i>Skoda</i> is hightlight in orange as it was the car make with highest Pass % (see Visualisation 1).</td>
+</tr>
+<tr>
+<td style="vertical-align: top;"><strong>Insight:</strong></td>
+<td style="vertical-align: top;">I highlight <i>Skoda</i> as that is the car make that has been shown to have the highest Pass % in previous visualisations. I expected <i>Skoda</i> to be consistently the lowest in all categories, or at least near the bottom. However for Steering and Suspension % we find it performed rather poorly, with a fail rate of 13.12% compared with <i>Toyota's</i> 11.34%. However for the other 3 categories, out hypothesis was correct, with <i>Skoda</i> having the lowest Vehicle and Safety Equipment % and Lighting and Electrical % of the ten car makes.</td>
+</tr>
+<tr>
+<td style="vertical-align: top;"><strong>Design considerations</strong></td>
+<td style="vertical-align: top;"> I have used bar charts as they are very effective at conveying quantitative information. As there were many fail items, I only chose the four most common to avoid overplotting. I filtered by the top 10 most popular car makes in Ireland to avoid overplotting. I coloured the bars blue (considered the most popular colour) and contrasted it with orange, which makes the column stand out and also readable for colourblind people. Using a different colour for <i>Opel</i> draws attention to it and makes it easy to compare across the three graphs. By sorting the vehicle makes based on the values of each attributes the usability of these charts is greatly increased. Using a different luminance for the weightlifting bar makes it pop out and makes it easy to compare its ranking in across all three attributes.<p/> The 'small multiples' approach invites comparison between the different car makes.</td></tr>
+<tr>
+<td style="width: 200px; vertical-align: top;"><strong>Data filtering and transformation:&nbsp;</strong></td>
+<td style="vertical-align: top;">Only the top 10 most popular car makes for Irish car buyers in 2016 are shown (<a href="https://www.independent.ie/life/motoring/car-news/revealed-irelands-top-10-best-selling-cars-in-2016-35179498.html" target="_blank" rel="noopener">source</a>).</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<html>
+<head>
+    <title>Visualisation 1</title>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/vega/3.0.10/vega.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-lite/2.1.2/vega-lite.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-embed/3.0.0-rc7/vega-embed.js"></script>
+   <style>
+       body {
+             font-family: sans-serif;
+           }
+    
+           .vega-actions a {
+             padding: 0.2em;
+           }
+    </style>
+</head>
+<body>
+    <table style="width: 850px; margin-left: auto; margin-right: auto;" cellspacing="5" cellpadding="5">
+    <tbody>
+    <tr>
+    <td style="width: 200px; vertical-align: top;"><strong>Name:&nbsp;</strong></td>
+    <td style="vertical-align: top;">Laura Brierton</td>
+    </tr>
+    <tr>
+    <td style="vertical-align: top;"><strong>Student Number:</strong></td>
+    <td style="vertical-align: top;">15317451</td>
+    </tr>
+    <tr>
+    <td style="vertical-align: top;"><strong>Dataset description:</strong></td>
+    <td style="vertical-align: top;">
+    <p><a href="https://data.gov.ie/dataset/2016-make-model-year-failures-at-nct" target="_blank" rel="noopener">2016 Make Model Year Failures at NCT</a>.</p>
+    <p>This data set contains information relating to vehicle makes and models tested by the National Car Testing Service in 2016. It also contains data as to why the vehicles failed</p>
+    </td>
+    </tr>
+    <tr>
+    <td style="vertical-align: top;"><strong>Initial questions</strong></td>
+    <td style="vertical-align: top;">How do the pass rates differ across car makes? Is there a relationship between car condition and likelyhood of passing the NCT?</td>
+    </tr>
+    </tbody>
+    </table>
+    <hr />
+  <div id="vis" align="center"></div>
+  <script type="text/javascript">
+    var yourVlSpec =  {
+      "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
+      "data": {
+        "url": "https://raw.githubusercontent.com/L-brierton/Information-Visualisation-of-Car-Dataset/master/Make%20Model%20Data%202016.csv",
+        "format": {
+          "type": "csv"
+        }
+      },
+      "title": {
+        "text": "Car Make vs Pass Rates",
+        "anchor": "middle"
+      },
+      "width":1000,
+      "height":400,
+      "mark":"bar",
+      "encoding": {
+        "x": {
+          "field": "VehicleMake",
+          "type": "nominal",
+		  "axis" :{
+              "grid": false,
+              "title": "Vehicle Make"},
+          "sort": {
+              "op": "mean",
+              "field": "PASS %",
+              "order": "descending"
+          }
+        },
+        "y": {
+          "field":  "PASS %",
+          "type": "quantitative",
+          "aggregate": "mean",
+		  "axis" :{
+            "grid": false, 
+            "title": "Average Pass Percentage"
+          }
+          
+        },
+        "tooltip":{
+            "aggregate": "count",
+            "type":"quantitative"
+        }
+      }
+    }
+        vegaEmbed("#vis", yourVlSpec);
+  </script>
+    <hr />
+<table style="width: 850px; margin-left: auto; margin-right: auto;" cellspacing="5" cellpadding="5">
+<tbody>
+<tr>
+<td style="width: 200px; vertical-align: top;"><strong>Description:&nbsp;</strong></td>
+<td style="vertical-align: top;">Above graph shows the relationship between the makes of a car and the average pass rate for all models. The x-axis indicates the model of car while each bar represents the percentage of cars of this make that passed. Hovering over a bar will reveal an associated car. Hovering over a bar will reveal the number of cars of each make that were tested.</td>
+</tr>
+<tr>
+<td style="vertical-align: top;"><strong>Insight:</strong></td>
+<td style="vertical-align: top;">In general we find that the make of a car is related to the its NCT pass rate - in general, popular car makes such as <i>Hyundai</i> and <i>Volkswagen</i> tend to have a higher number of records and hover around the 50% mark. This correlation is not perfect as there are a number of makes with low nuber of records which also lie in the middle (e.g. Austin Rover and Tesla). <p/>There are a number of outliers in the dataset, most notable the makes that are at 100% pass rate. These car makes tend to be luxery car brands (e.g. <i>Linz</i> and <i>Lamborghini</i>) which tend to be few in number but high in quality. Likewise, a number of car makes are at 0% are car makes considered "classic" (e.g. <i>Morris</i> and <i>Talbot</i>), older makes of cars are unlikely to have the same attention to saftey as newer models. </td>
+</tr>
+<tr>
+<td style="vertical-align: top;"><strong>Design considerations</strong></td>
+<td style="vertical-align: top;">I have used a bar chart as it is an effective way to show the relation between nominal and quantitative data, taking advantage of our ability to accurately perceive variation in both horizontal and vertical position. I have also encoded the number of records in tooltips so it is possible to hover over a bar to see if the numbers of cars of that make that were tested. By sorting the car makes based on the values of each attributes the usability of these charts is greatly increased.<p/>The chart suffers from overplotting. I considered filtering only the 10 most popular cars in 2016 (from this <a href="https://www.independent.ie/life/motoring/car-news/revealed-irelands-top-10-best-selling-cars-in-2016-35179498.html" target="_blank" rel="noopener">source) to make the chart more readable and relevant to the average car buyer.</a></td>
+</tr>
+<tr>
+<td style="width: 200px; vertical-align: top;"><strong>Data filtering and transformation:&nbsp;</strong></td>
+<td style="vertical-align: top;">The original data as provided was improperly formatted so had to edited to allow it to be read a .csv file</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
